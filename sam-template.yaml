@@ -1,14 +1,11 @@
-# 7-142 Creating your first SAM templates
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: 7-142 Creating SAM Template - Hello World
-
 Globals:
   Function:
     MemorySize: 128
     Runtime: nodejs8.10
     Timeout: 5
-
 Resources:
   eventLogger:
     Type: AWS::Serverless::Function
@@ -20,18 +17,15 @@ Resources:
           Properties:
             Path: /logs
             Method: get
-# get for GET method (for GetLogs method at /logs getting logs as API call to Lambda Function) - Swagger generated implicitly
         FileUpload:
           Type: S3
           Properties:
-            Bucket: !Ref MyBucket
+            Bucket:
+              Ref: MyBucket
             Events: s3:ObjectCreated:*
-# An API method reacting to trigger from placing/Create'ing of any object in an S3 bucket - would just return the object
-# As-is, PUT methods are asynchronous, no response would be triggered from the Lambda function - must do by code in logger.js
-
+      CodeUri: s3://pnj-sam/24ef64debefb706eefb8dda117162395
   MyBucket:
     Type: AWS::S3::Bucket
-  
   addNumbers:
     Type: AWS::Serverless::Function
     Properties:
@@ -42,4 +36,4 @@ Resources:
           Properties:
             Path: /add
             Method: post
-# post for POST method (for PostAdd method at /add adding numbers as API call to Lambda Function) - Swagger generated implicitly
+      CodeUri: s3://pnj-sam/24ef64debefb706eefb8dda117162395
